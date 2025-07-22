@@ -121,7 +121,7 @@ crashReporter.start({ productName: config.appName, companyName: config.author, s
 forceSingleInstance();
 
 app.on('ready', function () {
-    showSplashWindow();
+    // showSplashWindow();
     let tray = new Tray(trayIcon);
     contextMenu = Menu.buildFromTemplate(contextMenuTemplate);
     tray.setToolTip(config.appName);
@@ -133,7 +133,7 @@ app.on('ready', function () {
         app.dock.setMenu(contextMenu);
     }
     //hide splash screen randomly after 2-3 seconds
-    setTimeout(createMainWindow, (Math.random() + 2) * 1000);
+    setTimeout(createMainWindow, 0);
 });
 
 // Quit when all windows are closed.
@@ -182,18 +182,6 @@ function forceSingleInstance() {
     }
 }
 
-function showSplashWindow() {
-    splashwindow = new BrowserWindow({ accessibleTitle: config.appName, title: config.appName, icon: config.appIcon, width: 400, height: 300, center: true, resizable: false, movable: false, alwaysOnTop: true, skipTaskbar: true, frame: false });
-    splashwindow.setIcon(appIcon);
-    splashwindow.setOverlayIcon(appIcon, config.appName);
-    splashwindow.loadURL('file://' + __dirname + '/splash.html', options);
-}
-
-function hideSplashWindow() {
-    splashwindow.close();
-    splashwindow = null;
-}
-
 function createMainWindow() {
     // Create the main window.
     mainWindow = new BrowserWindow({ accessibleTitle: config.appName, title: config.appName, icon: appIcon, minWidth: 400, minHeight: 300, width: 800, height: 600, show: false, webPreferences: { nodeIntegration: false, defaultEncoding: 'UTF-8' } });
@@ -224,7 +212,6 @@ function createMainWindow() {
     });
     mainWindow.loadURL('file://' + __dirname + '/default.html', options);
     mainWindow.once('ready-to-show', () => {
-        hideSplashWindow();
         mainWindow.maximize();
         mainWindow.show();
         mainWindow.focus();
